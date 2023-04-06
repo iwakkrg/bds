@@ -8,7 +8,12 @@ body {
 h1 {
     text-align: center;
 }
-
+#link {
+    text-align: center;
+}
+a:link, a:visited {
+    color: #3a9bdc;
+}
 textarea, select, input {
     font-family: Monospace;
     font-size: 13px;
