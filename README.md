@@ -46,7 +46,7 @@ To do that, set the options to be like this:
 
 **input code:**
 ```
-$var[i]. ELEMENT $var[n;$sum[$var[n];1]]
+$var[i]. ELEMENT $var[i;$sum[$var[i];1]]
 ```
 
 The output should be like this:
