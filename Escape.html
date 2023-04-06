@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <meta name="theme-color" content="#333333"/>
+        <link rel="stylesheet" href="style.css"/>
+        <script src="scripts.js"></script>
+    </head>
+    <body>
+        <div class="main">
+            <h1>bds code escaper I guess</h1>
+            
+            <h3>code input:</h3>
+            <textarea id="input"></textarea><br>
+            <button onclick="output()">escape</button>
+            <button id="danger" onclick="reset('input','output')">reset</button>
+            <br><br>
+            
+            <h3>output:</h3>
+            <textarea readonly id="output"></textarea><br>
+            <button id="secondary" onclick="copy('output')">copy</button>
+        </div>
+    </body>
+    <script>
+        function output(){
+            let input = document.getElementById("input").value;
+            document.getElementById("output").value = escape(input);
+        }
+    </script>
+</html>
