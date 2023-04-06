@@ -1,83 +1,91 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-        <meta name="theme-color" content="#333333"/>
-        <link rel="stylesheet" href="style.css"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="theme-color" content="#333333" />
+        <link rel="stylesheet" href="style.css" />
         <script src="scripts.js"></script>
     </head>
-		<body>
+    <body>
         <h1>bds array forEach tool thing</h1>
-			  <label for="method">loop method:</label>
-			  <select id="method" name="method">
-			      <option value="forEach">forEach</option>
-			      <option value="repeat">repeat</option>
-			  </select>
-			  <br>
-			  
-			  <label for="escaped">escape element:</label>
-			  <input type="checkbox" id="escaped" name="escaped">
-			  <br>
-			  
-			  <label for="array">array:</label>
-			  <input type="text" id="array" name="array" placeholder="example: $message">
-			  <br>
-			  
-			  <label for="separator">array separator:</label>
-			  <input type="text" id="separator" name="separator" placeholder="use '\n' for new line">
-			  
-			  <h3>code input:</h3>
 
-			  <textarea id="input" name="input" placeholder="example: $sendMessage[ELEMENT]"></textarea>
-			  <br>
-			  <button onclick="loop()">convert</button>
-			  <button id="danger" onclick="reset('input', 'output', 'escaped', 'array', 'separator')">reset</button>
-			  <small>
-			    	<p>(use 'ELEMENT' as a placeholder value from the array, can only be used once)</p>
-			  </small>
+        <div id="link">
+            <a href="https://github.com/iwakkrg/bds/blob/main/README.md">How to use this shit?</a>
+        </div>
+        <br>
+
+        <label for="method">loop method:</label>
+        <select id="method" name="method">
+            <option value="forEach">forEach</option>
+            <option value="repeat">repeat</option>
+        </select>
+        <br>
+        
+        <label for="escaped">escape element:</label>
+        <input type="checkbox" id="escaped" name="escaped" />
+        <br>
+
+        <label for="array">array:</label>
+        <input type="text" id="array" name="array" placeholder="example: $message" />
+        <br>
+
+        <label for="separator">array separator:</label>
+        <input type="text" id="separator" name="separator" placeholder="use '\n' for new line" />
+
+        <h3>code input:</h3>
+
+        <textarea id="input" name="input" placeholder="example: $sendMessage[ELEMENT]"></textarea>
+        <br>
+
+        <button onclick="loop()">convert</button>
+        <button id="danger" onclick="reset('input', 'output', 'escaped', 'array', 'separator')">reset</button>
+        <small>
+            <p>(use 'ELEMENT' as a placeholder value from the array, can only be used once)</p>
+        </small>
         <br>
 
         <h3>output:</h3>
 
         <label for="output_separator">separator:</label>
-        <input type="text" id="output_separator" placeholder="use '\n' for new line">
-
+        <input type="text" id="output_separator" placeholder="use '\n' for new line" />
         <textarea id="output" name="output" readonly></textarea>
         <br>
+
         <button id="secondary" onclick="copy('output')">copy</button>
         <small>
             <p>(replace 'SEPARATOR' with anything to separate the response)</p>
         </small>
-        <br><br>
-        
+        <br>
+        <br>
+
         <script>
-            function loop(){
+            function loop() {
                 let method = document.getElementById("method").value;
                 let input = document.getElementById("input").value;
-                let separator = document.getElementById('separator').value.replace(/\\n/g,'\n');
-                const escaped = document.getElementById('escaped').checked;
-                const array = document.getElementById('array').value;
-                let output_separator = document.getElementById('output_separator').value.replace(/\\n/g,'\n') || "SEPARATOR";
-                
-                if(method=="forEach"){
+                let separator = document.getElementById("separator").value.replace(/\\n/g, "\n");
+                const escaped = document.getElementById("escaped").checked;
+                const array = document.getElementById("array").value;
+                let output_separator = document.getElementById("output_separator").value.replace(/\\n/g, "\n") || "SEPARATOR";
+
+                if (method == "forEach") {
                     input = escape(input);
                     let [start, end] = input.split("ELEMENT");
-                    if(escaped){
-                        start = `${start}%{DOL}%url[decode\\;`
-                        end = `\\]${end}`
-                        separator = encodeURIComponent(separator).replace(/\%20/g,'+')
+                    if (escaped) {
+                        start = `${start}%{DOL}%url[decode\\;`;
+                        end = `\\]${end}`;
+                        separator = encodeURIComponent(separator).replace(/\%20/g, "+");
                     }
-                    let output = `$eval[${start}$replaceText[${escaped?'$url[encode;'+array+']':array};${separator};${end+output_separator+start}]${end}]`;
-                    if(separator==""){
-                        output = `$eval[$textSplit[${array};]${start}$joinSplitText[${end+output_separator+start}]${end}]`
+                    let output = `$eval[${start}$replaceText[${escaped ? "$url[encode;" + array + "]" : array};${separator};${end + output_separator + start}]${end}]`;
+                    if (separator == "") {
+                        output = `$eval[$textSplit[${array};]${start}$joinSplitText[${end + output_separator + start}]${end}]`;
                     }
-                    document.getElementById('output').value=output;
+                    document.getElementById("output").value = output;
                 }
-                else if(method=="repeat"){
-                    input = output_separator + input.replace("ELEMENT","$splitText[$var[_]]") + "$var[_;$sum[$var[_];1]]";
+                else if (method == "repeat") {
+                    input = output_separator + input.replace("ELEMENT", "$splitText[$var[_]]") + "$var[_;$sum[$var[_];1]]";
                     let code = escape(input);
-                    let output = `$textSplit[${array};${separator}]\n$var[_;1]\n$replaceText[$eval[$replaceText[$replaceText[$cropText[$repeatMessage[10;$sum[1e38;0]$sum[1e38;0]];$getTextSplitLength;];1;0];0;${code}]];${output_separator};;1]`
-                    document.getElementById('output').value=output;
+                    let output = `$textSplit[${array};${separator}]\n$var[_;1]\n$replaceText[$eval[$replaceText[$replaceText[$cropText[$repeatMessage[10;$sum[1e38;0]$sum[1e38;0]];$getTextSplitLength;];1;0];0;${code}]];${output_separator};;1]`;
+                    document.getElementById("output").value = output;
                 }
             }
         </script>
