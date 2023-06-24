@@ -1,61 +1,59 @@
-# How to use this shit
-## Loop methods
-You can now choose which method do you prefer.
+# How to Use This Shit
+
+## Loop Methods
+You have two options to choose from:
 
 ### forEach
-Uses just `$replaceText` and `$eval`, generally more compact and faster. It works by wrapping each words (represented by `ELEMENT`) with the input code directly. 
+This method is more compact and faster. It uses `$replaceText` and `$eval` to wrap each array value (`ELEMENT`) with the input code directly.
 
 ### repeat
-Uses a lot more functions, generally longer and slower. It works by repeating the code as long as the array length, then uses `$splitText` to get the `ELEMENT` value. 
+This method is longer and slower. It uses multiple functions and repeats the code based on the array length. It then gets the `ELEMENT` value using `$splitText`.
 
-## Escape element
-To avoid characters like `$`, `;` and `]` in the array value from breaking the code. You have to use this if the array is from a user-inputted value such as `$message`.
+## Escape Element
+To prevent certain characters like `$`, `;`, and `]` in the array value from breaking the code, you need to use this. It is necessary when the array contains user-inputted values, such as `$message`. 
 
-Doesn't affect `repeat` method.
+This step doesn't affect the "repeat" method.
 
 ## Array
-Where the code gets the `ELEMENT` value from. 
+This represents the source from which the code retrieves the `ELEMENT` value. Think of it as the first argument of `$textSplit`.
 
-Just imagine this as the 1st arg of `$textSplit`.
-
-## Array separator
-To separate the array. 
-
-Just imagine this as the 2nd arg of `$textSplit`.
+## Array Separator
+This separates the elements within the array. Think of it as the second argument of `$textSplit`.
 
 ## Input
-The code to be converted. Use `ELEMENT` to represent the current array value.
+This refers to the code you want to convert. Use `ELEMENT` to represent the current array value.
 
-## Output separator
-Separates each output, represented by `SEPARATOR` in the output code if set to none.
+## Output Separator
+This separates each output in the output code. If set to none, it is represented by `SEPARATOR` in the output code.
 
 # Example
-We are going to make a simple code that converts `$message` to be:
+Let's create a simple code that converts `$message` into the following format:
 ```
 1. word
 2. word2
 3. word3
 etc
 ```
-To do that, set the options to be like this:
-- **loop method:** (any, `forEach` recommended)
-- **escape element:** (checked)
-- **array:** `$message`
-- **separator:** (space)
-- **output separator:** `\n`
+To achieve that, set the options as follows:
+- **Loop Method:** (choose any method, but `forEach` is recommended.)
+- **Escape Element:** (checked)
+- **Array:** `$message`
+- **Separator:** (space)
+- **Output Separator:** `\n`
 
-**input code:**
+### Input Code:
 ```
 $var[i]. ELEMENT $var[i;$sum[$var[i];1]]
 ```
+Click "convert"
 
-The output should be like this:
+The resulting output code will be:
 ```
 $eval[%{DOL}%var[i\]. %{DOL}%url[decode\;$replaceText[$url[encode;$message];+;\] %{DOL}%var[i\;%{DOL}%sum[%{DOL}%var[i\]\;1\]\]
 %{DOL}%var[i\]. %{DOL}%url[decode\;]\] %{DOL}%var[i\;%{DOL}%sum[%{DOL}%var[i\]\;1\]\]]
 ```
 
-Then put it into your code to be like this:
+You can then put it into your code to be like this:
 ```
 $nomention
 $var[i;1]
@@ -63,6 +61,5 @@ $eval[%{DOL}%var[i\]. %{DOL}%url[decode\;$replaceText[$url[encode;$message];+;\]
 %{DOL}%var[i\]. %{DOL}%url[decode\;]\] %{DOL}%var[i\;%{DOL}%sum[%{DOL}%var[i\]\;1\]\]]
 ```
 
-### Example usage and output
+### Example Usage and Output
 ![example](https://user-images.githubusercontent.com/102880539/230498472-08af5f52-e50b-434a-8753-73991a817d05.jpg)
-
